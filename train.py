@@ -63,5 +63,5 @@ s3_client = boto3.client(
     config=Config(signature_version="s3v4")
 )
 s3_client.upload_file(model_name, config_script.bucket_name, model_name)
-s3_client.upload_file("/var/log/onstart.log", config_script.bucket_name, model_name + "onstart.log")
 print("Файл успешно загружен через boto3")
+s3_client.upload_file("/var/log/onstart.log", config_script.bucket_name, model_name + "onstart.log")
