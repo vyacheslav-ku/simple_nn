@@ -40,10 +40,14 @@ for epoch in range(config_script.epoch):
     print(f"Epoch {epoch+1} complete. Loss: {loss.item()}")
 
 # Сохраняем модель
+from datetime import datetime
+timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+model_name = f"{timestamp}_mnist_model.pth"
+
 torch.save(model.state_dict(), "mnist_model.pth")
 print("Модель сохранена в mnist_model.pth")
 
-
+import boto3
 s3_client = boto3.client(
         "s3",
         endpoint_url=config_script.minio_endpoint,
@@ -51,5 +55,5 @@ s3_client = boto3.client(
         aws_secret_access_key=config_script.temp_secret_key,
         config=Config(signature_version="s3v4")
     )
-s3_client.upload_file("example.txt", config_script.bucket_name, "example.txt")
+s3_client.upload_file(model_name, config_script.bucket_name, model_name)
 print("Файл успешно загружен через boto3")
