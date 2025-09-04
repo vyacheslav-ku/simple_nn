@@ -1,3 +1,5 @@
+import os
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -48,6 +50,7 @@ from datetime import datetime
 
 timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
 model_name = f"{timestamp}_mnist_model.pth"
+model_name = os.getenv("model_name", model_name)
 
 torch.save(model.state_dict(), model_name)
 print(f"Модель сохранена в {model_name}")
