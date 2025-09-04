@@ -44,8 +44,8 @@ from datetime import datetime
 timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
 model_name = f"{timestamp}_mnist_model.pth"
 
-torch.save(model.state_dict(), "mnist_model.pth")
-print("Модель сохранена в mnist_model.pth")
+torch.save(model.state_dict(), model_name)
+print(f"Модель сохранена в {model_name}")
 
 import boto3
 from botocore.client import Config
