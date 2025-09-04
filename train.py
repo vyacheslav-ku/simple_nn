@@ -46,10 +46,10 @@ print("Модель сохранена в mnist_model.pth")
 
 s3_client = boto3.client(
         "s3",
-        endpoint_url=minio_endpoint,
-        aws_access_key_id=temp_access_key,
-        aws_secret_access_key=temp_secret_key,
+        endpoint_url=config_script.minio_endpoint,
+        aws_access_key_id=config_script.temp_access_key,
+        aws_secret_access_key=config_script.temp_secret_key,
         config=Config(signature_version="s3v4")
     )
-s3_client.upload_file("example.txt", bucket_name, "example.txt")
+s3_client.upload_file("example.txt", config_script.bucket_name, "example.txt")
 print("Файл успешно загружен через boto3")
