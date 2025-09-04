@@ -48,6 +48,7 @@ torch.save(model.state_dict(), "mnist_model.pth")
 print("Модель сохранена в mnist_model.pth")
 
 import boto3
+from botocore.client import Config
 s3_client = boto3.client(
         "s3",
         endpoint_url=config_script.minio_endpoint,
