@@ -42,3 +42,14 @@ for epoch in range(config_script.epoch):
 # Сохраняем модель
 torch.save(model.state_dict(), "mnist_model.pth")
 print("Модель сохранена в mnist_model.pth")
+
+
+s3_client = boto3.client(
+        "s3",
+        endpoint_url=minio_endpoint,
+        aws_access_key_id=temp_access_key,
+        aws_secret_access_key=temp_secret_key,
+        config=Config(signature_version="s3v4")
+    )
+s3_client.upload_file("example.txt", bucket_name, "example.txt")
+print("Файл успешно загружен через boto3")
