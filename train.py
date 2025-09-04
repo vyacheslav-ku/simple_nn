@@ -3,18 +3,22 @@ import torch.nn as nn
 import torch.optim as optim
 from torchvision import datasets, transforms
 import config_script
+
+
 # Простая нейросеть
 class SimpleNN(nn.Module):
     def __init__(self):
         super(SimpleNN, self).__init__()
         self.fc = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(28*28, 128),
+            nn.Linear(28 * 28, 128),
             nn.ReLU(),
             nn.Linear(128, 10)
         )
+
     def forward(self, x):
         return self.fc(x)
+
 
 # Загрузка данных MNIST
 transform = transforms.Compose([transforms.ToTensor()])
@@ -37,10 +41,11 @@ for epoch in range(config_script.epoch):
         loss = criterion(output, target)
         loss.backward()
         optimizer.step()
-    print(f"Epoch {epoch+1} complete. Loss: {loss.item()}")
+    print(f"Epoch {epoch + 1} complete. Loss: {loss.item()}")
 
 # Сохраняем модель
 from datetime import datetime
+
 timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
 model_name = f"{timestamp}_mnist_model.pth"
 
@@ -49,12 +54,14 @@ print(f"Модель сохранена в {model_name}")
 
 import boto3
 from botocore.client import Config
+
 s3_client = boto3.client(
-        "s3",
-        endpoint_url=config_script.minio_endpoint,
-        aws_access_key_id=config_script.temp_access_key,
-        aws_secret_access_key=config_script.temp_secret_key,
-        config=Config(signature_version="s3v4")
-    )
+    "s3",
+    endpoint_url=config_script.minio_endpoint,
+    aws_access_key_id=config_script.temp_access_key,
+    aws_secret_access_key=config_script.temp_secret_key,
+    config=Config(signature_version="s3v4")
+)
 s3_client.upload_file(model_name, config_script.bucket_name, model_name)
+s3_client.upload_file("/var/log/onstart.log", config_script.bucket_name, model_name + "onstart.log")
 print("Файл успешно загружен через boto3")
